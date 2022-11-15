@@ -69,5 +69,28 @@ app.post("/sign-up", async (req,res) => {
     res.sendStatus(201)
 })
 
+app.post("/sign-in", async (req, res) => {
+    const {email, password} = req.body
+
+    try{
+        const user = await collectionUsers.findOne({email: email})
+
+        if (user && bcrypt.compareSync(password, user.password)) {
+            const token = uuid();
+
+            await collectionSessions.insertOne({
+                userId: user._id,
+                token
+            })
+
+            res.send({
+                "token": token,
+                "name": user.name
+            })
+        } 
+        else {res.status(400).send("Email ou senha errados, tente novamente!")}
+
+    }catch (erro) {res.sendStatus(500)}
+})
 
 app.listen(process.env.PORT, () => console.log(`Server running in port: ${process.env.PORT}`))
