@@ -151,5 +151,23 @@ app.post("/wallet", async (req, res) => {
     res.send(balanceDB)
 })
 
+app.get("/wallet", async (req, res) => {
+    const {authorization} = req.headers
+    const token =  authorization?.replace('Bearer ', '');
 
+    if (!token) {res.sendStatus(401);return}
+
+    const session = await collectionSessions.findOne({token})
+    if (!session) {res.sendStatus(401); return}
+
+    const wallet = await collectionWallet.find({
+        $or : [{userId: session.userId}]
+    }).toArray()
+
+    const balance = await collectionBalance.findOne({userId: session.userId})
+
+    const response = {balance: balance.balance, wallet}
+
+    res.send(response)
+})
 app.listen(process.env.PORT, () => console.log(`Server running in port: ${process.env.PORT}`))
