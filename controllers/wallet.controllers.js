@@ -1,3 +1,6 @@
+import { walletSchema } from "..";
+import dayjs from 'dayjs';
+
 export async function postWallet (req, res) {
     const {authorization} = req.headers
     const token =  authorization?.replace('Bearer ', '');
