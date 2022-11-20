@@ -166,8 +166,15 @@ app.get("/wallet", async (req, res) => {
 
     const balance = await collectionBalance.findOne({userId: session.userId})
 
-    const response = {balance: balance.balance, wallet}
+    let response;
+    if (!balance) {
+        response;response = {balance: 0, wallet}
+    } else{
+        response = {balance: balance.balance, wallet}
+    }
+
 
     res.send(response)
 })
+
 app.listen(process.env.PORT, () => console.log(`Server running in port: ${process.env.PORT}`))
