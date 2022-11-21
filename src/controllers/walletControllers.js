@@ -5,18 +5,8 @@ export async function postWallet (req, res) {
     const {authorization} = req.headers
     const token =  authorization?.replace('Bearer ', '');
 
-    // if (!token) {res.sendStatus(401);return}
-
     const session = await collectionSessions.findOne({token})
-    // if (!session) {res.sendStatus(401); return}
-
-    // const validation = walletSchema.validate(req.body, {abortEarly: false})
-    // if (validation.error) {
-    //     const errors = validation.error.details.map((detail) => detail.message);
-    //     res.status(422).send(errors);
-    //     return;
-    // }
-
+ 
     const {type, amount, description} = req.body
     const wallet = {
         userId: session.userId,
@@ -57,10 +47,7 @@ export async function getWallet (req, res) {
     const {authorization} = req.headers
     const token =  authorization?.replace('Bearer ', '');
     
-    // if (!token) {res.sendStatus(401);return}
-    
     const session = await collectionSessions.findOne({token})
-    // if (!session) {res.sendStatus(401); return}
     
     const wallet = await collectionWallet.find({
         $or : [{userId: session.userId}]
@@ -70,7 +57,7 @@ export async function getWallet (req, res) {
     
     let response;
     if (!balance) {
-        response;response = {balance: 0, wallet}
+        response = {balance: 0, wallet}
     } else{
         response = {balance: balance.balance, wallet}
     }
