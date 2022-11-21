@@ -1,7 +1,7 @@
 import { walletSchema } from "../index.js";
-import {collectionSessions} from "../db/dbs.js"
+import {collectionSessions, collectionWallet} from "../db/dbs.js"
 
-export async function postWalletMiddleware (req, res){
+export async function postWalletMiddleware (req, res, next){
     const {authorization} = req.headers
     const token =  authorization?.replace('Bearer ', '');
 
@@ -18,7 +18,7 @@ export async function postWalletMiddleware (req, res){
 
     next()
 }
-export async function getWalletMiddleware (req, res) {
+export async function getWalletMiddleware (req, res, next) {
     const {authorization} = req.headers
     const token =  authorization?.replace('Bearer ', '');
         

@@ -1,13 +1,13 @@
-import { walletSchema } from "..";
+import { collectionWallet, collectionSessions, collectionBalance} from '../db/dbs';
 import dayjs from 'dayjs';
 
 export async function postWallet (req, res) {
-    // const {authorization} = req.headers
-    // const token =  authorization?.replace('Bearer ', '');
+    const {authorization} = req.headers
+    const token =  authorization?.replace('Bearer ', '');
 
     // if (!token) {res.sendStatus(401);return}
 
-    // const session = await collectionSessions.findOne({token})
+    const session = await collectionSessions.findOne({token})
     // if (!session) {res.sendStatus(401); return}
 
     // const validation = walletSchema.validate(req.body, {abortEarly: false})
@@ -54,12 +54,12 @@ export async function postWallet (req, res) {
 }
 
 export async function getWallet (req, res) {
-    // const {authorization} = req.headers
-    // const token =  authorization?.replace('Bearer ', '');
+    const {authorization} = req.headers
+    const token =  authorization?.replace('Bearer ', '');
     
     // if (!token) {res.sendStatus(401);return}
     
-    // const session = await collectionSessions.findOne({token})
+    const session = await collectionSessions.findOne({token})
     // if (!session) {res.sendStatus(401); return}
     
     const wallet = await collectionWallet.find({
