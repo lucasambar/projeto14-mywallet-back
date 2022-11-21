@@ -1,7 +1,7 @@
 import { userSchema } from "..";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { collectionUsers } from "../db/dbs";
+import { collectionUsers, collectionSessions } from "../db/dbs";
 
 export async function  userSignUp (req, res) {
     const user = req.body
@@ -60,5 +60,5 @@ export async function userSignIn (req, res) {
         } 
         else {res.status(400).send("Email ou senha errados, tente novamente!")}
 
-    } catch (erro) {res.sendStatus(500)}
+    } catch (erro) {res.sendStatus(500); console.log(erro)}
 }
