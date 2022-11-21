@@ -1,31 +1,32 @@
 import { userSchema } from "..";
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-
+import { collectionUsers } from "../db/dbs";
 
 export async function  userSignUp (req, res) {
     const user = req.body
 
-    const validation = userSchema.validate(req.body, {abortEarly: false})
+    // const validation = userSchema.validate(req.body, {abortEarly: false})
 
-    if (validation.error) {
-        const errors = validation.error.details.map((detail) => detail.message);
-        res.status(422).send(errors);
-        return;
-    }
+    // if (validation.error) {
+    //     const errors = validation.error.details.map((detail) => detail.message);
+    //     res.status(422).send(errors);
+    //     return;
+    // }
 
-    try {
-        const exist = await collectionUsers.findOne({email: user.email})
-        if (exist) {
-            res.status(409).send("Usuário já cadstrado!"); 
-            return
-        }
+    // try {
+    //     const exist = await collectionUsers.findOne({email: user.email})
+    //     if (exist) {
+    //         res.status(409).send("Usuário já cadstrado!"); 
+    //         return
+    //     }
 
-    } catch (erro) {console.log(erro); res.sendStatus(500); return}
+    // } catch (erro) {console.log(erro); res.sendStatus(500); return}
 
     const passwordHash = bcrypt.hashSync(user.password, 10);
 
     try {
+        console.log("chegou aqui")
         const userDB = {
             name: user.name,
             email: user.email,
@@ -33,7 +34,7 @@ export async function  userSignUp (req, res) {
         }
         await collectionUsers.insertOne(userDB)
 
-    } catch (erro) {res.sendStatus(500); return}
+    } catch (erro) {console.log(erro); res.sendStatus(500); return}
 
     res.sendStatus(201)
 }
